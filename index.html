@@ -1,0 +1,508 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Guia de Plantio: Rúcula Gigante 🌱</title>
+
+    <style>
+        :root {
+            --primary-green: #2E8B57;
+            --light-green: #E8F5E9;
+            --hover-green: #C8E6C9;
+            --earth-brown: #8B4513;
+            --text-dark: #333333;
+            --bg-color: #F4F7F4;
+            --correct: #4CAF50;
+            --incorrect: #F44336;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            max-width: 650px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            background: linear-gradient(135deg, #2E8B57, #8FBC8F);
+        }
+
+        .quiz-content {
+            padding: 30px;
+        }
+
+        h1 {
+            color: var(--primary-green);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        .progress {
+            text-align: right;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--earth-brown);
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--light-green);
+            border: 2px solid var(--primary-green);
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-align: left;
+            color: var(--text-dark);
+            transition: 0.3s;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: var(--hover-green);
+            transform: translateY(-2px);
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            background-color: var(--correct);
+            color: white;
+            border-color: var(--correct);
+        }
+
+        .option-btn.wrong {
+            background-color: var(--incorrect);
+            color: white;
+            border-color: var(--incorrect);
+        }
+
+        .feedback-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .feedback-box.show {
+            display: block;
+        }
+
+        .feedback-box.error {
+            background-color: #FFEBEE;
+            border-left: 4px solid var(--incorrect);
+            color: #C62828;
+        }
+
+        .feedback-box.success {
+            background-color: #E8F5E9;
+            border-left: 4px solid var(--correct);
+            color: #2E7D32;
+        }
+
+        .next-btn,
+        .restart-btn {
+            background-color: var(--earth-brown);
+            color: white;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        .next-btn:hover,
+        .restart-btn:hover {
+            background-color: #6b3410;
+        }
+
+        .results {
+            text-align: center;
+            display: none;
+            line-height: 1.8;
+        }
+
+        .results h2 {
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+
+        .results .score {
+            font-size: 1.5rem;
+            color: var(--earth-brown);
+            margin: 15px 0;
+        }
+
+        @media (max-width: 480px) {
+            .quiz-content {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-image {
+                height: 160px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Imagem de capa da rúcula gigante -->
+        <img
+            src="capa-rucula.png"
+            alt="Plantação de rúcula gigante"
+            class="header-image"
+        >
+
+        <div class="quiz-content">
+
+            <h1>Guia de Plantio: Rúcula Gigante 🌱</h1>
+
+            <div id="quiz-section">
+
+                <div class="progress" id="progress"></div>
+
+                <div class="question-text" id="question">
+                    Carregando pergunta...
+                </div>
+
+                <div class="options-container" id="options"></div>
+
+                <div class="feedback-box" id="feedback"></div>
+
+                <button
+                    class="next-btn"
+                    id="next-btn"
+                    onclick="nextQuestion()"
+                    style="display: none;"
+                >
+                    Próxima Pergunta →
+                </button>
+
+            </div>
+
+            <div id="results-section" class="results">
+
+                <h2>Quiz concluído! 🌿</h2>
+
+                <p>Você terminou o guia de plantio da rúcula gigante!</p>
+
+                <div class="score" id="score-text"></div>
+
+                <p id="final-message"></p>
+
+                <button
+                    class="restart-btn"
+                    onclick="restartQuiz()"
+                >
+                    Tentar novamente ↻
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "1. Qual é o melhor local para plantar rúcula gigante?",
+                options: [
+                    {
+                        text: "Em um local totalmente escuro.",
+                        correct: false
+                    },
+                    {
+                        text: "Em um local com boa iluminação e sol ameno.",
+                        correct: true
+                    },
+                    {
+                        text: "Em um ambiente sem ventilação.",
+                        correct: false
+                    }
+                ],
+                explanation: "A rúcula precisa de boa iluminação. Em regiões quentes, prefira o sol da manhã e, se necessário, sombra parcial nos horários mais quentes."
+            },
+
+            {
+                question: "2. Qual tipo de solo é mais indicado para a rúcula?",
+                options: [
+                    {
+                        text: "Solo fértil, rico em matéria orgânica e bem drenado.",
+                        correct: true
+                    },
+                    {
+                        text: "Areia pura, sem nutrientes.",
+                        correct: false
+                    },
+                    {
+                        text: "Solo compactado e sempre encharcado.",
+                        correct: false
+                    }
+                ],
+                explanation: "Um solo fértil, rico em matéria orgânica e com boa drenagem favorece o desenvolvimento das raízes e das folhas."
+            },
+
+            {
+                question: "3. Como deve ser feita a rega da rúcula gigante?",
+                options: [
+                    {
+                        text: "Regar somente uma vez por mês.",
+                        correct: false
+                    },
+                    {
+                        text: "Manter o solo úmido, sem encharcar.",
+                        correct: true
+                    },
+                    {
+                        text: "Deixar o solo completamente seco por vários dias.",
+                        correct: false
+                    }
+                ],
+                explanation: "A rúcula gosta de umidade regular. Verifique o solo e regue quando necessário, evitando o excesso de água."
+            },
+
+            {
+                question: "4. O que fazer depois que as sementes germinarem?",
+                options: [
+                    {
+                        text: "Retirar todas as mudas do recipiente.",
+                        correct: false
+                    },
+                    {
+                        text: "Parar completamente a rega.",
+                        correct: false
+                    },
+                    {
+                        text: "Continuar os cuidados e dar espaço para as mudas crescerem.",
+                        correct: true
+                    }
+                ],
+                explanation: "Após a germinação, mantenha a umidade adequada e, quando as mudas estiverem suficientemente desenvolvidas, faça o desbaste se estiverem muito próximas."
+            },
+
+            {
+                question: "5. Qual cuidado ajuda a manter a rúcula saudável?",
+                options: [
+                    {
+                        text: "Observar a umidade, a iluminação e possíveis pragas.",
+                        correct: true
+                    },
+                    {
+                        text: "Deixar água acumulada no recipiente.",
+                        correct: false
+                    },
+                    {
+                        text: "Nunca verificar as folhas da planta.",
+                        correct: false
+                    }
+                ],
+                explanation: "Observar regularmente as folhas, a umidade do solo e a presença de pragas ajuda a identificar problemas e manter a planta saudável."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionEl = document.getElementById("question");
+        const optionsEl = document.getElementById("options");
+        const feedbackEl = document.getElementById("feedback");
+        const nextBtn = document.getElementById("next-btn");
+        const progressEl = document.getElementById("progress");
+        const quizSection = document.getElementById("quiz-section");
+        const resultsSection = document.getElementById("results-section");
+        const scoreText = document.getElementById("score-text");
+        const finalMessage = document.getElementById("final-message");
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+
+            return array;
+        }
+
+        function loadQuestion() {
+            resetState();
+
+            const currentQuestion = questions[currentQuestionIndex];
+
+            progressEl.innerText =
+                `Pergunta ${currentQuestionIndex + 1} de ${questions.length}`;
+
+            questionEl.innerText = currentQuestion.question;
+
+            const shuffledOptions = shuffleArray([
+                ...currentQuestion.options
+            ]);
+
+            shuffledOptions.forEach(option => {
+                const button = document.createElement("button");
+
+                button.innerText = option.text;
+                button.classList.add("option-btn");
+
+                button.addEventListener("click", () => {
+                    selectAnswer(
+                        button,
+                        option,
+                        currentQuestion.explanation
+                    );
+                });
+
+                optionsEl.appendChild(button);
+            });
+        }
+
+        function selectAnswer(selectedButton, option, explanation) {
+            const isCorrect = option.correct;
+
+            Array.from(optionsEl.children).forEach(button => {
+                button.disabled = true;
+            });
+
+            feedbackEl.className = "feedback-box show";
+
+            if (isCorrect) {
+                selectedButton.classList.add("correct");
+                score++;
+
+                feedbackEl.classList.add("success");
+
+                feedbackEl.innerHTML =
+                    `<strong>Correto! 🌱</strong><br>${explanation}`;
+            } else {
+                selectedButton.classList.add("wrong");
+
+                feedbackEl.classList.add("error");
+
+                feedbackEl.innerHTML =
+                    `<strong>Não foi dessa vez! 🍃</strong><br>${explanation}`;
+
+                Array.from(optionsEl.children).forEach(button => {
+                    const correctOption = questions[
+                        currentQuestionIndex
+                    ].options.find(option => option.correct);
+
+                    if (button.innerText === correctOption.text) {
+                        button.classList.add("correct");
+                    }
+                });
+            }
+
+            nextBtn.style.display = "block";
+
+            if (currentQuestionIndex === questions.length - 1) {
+                nextBtn.innerText = "Ver resultado →";
+            }
+        }
+
+        function resetState() {
+            nextBtn.style.display = "none";
+            nextBtn.innerText = "Próxima Pergunta →";
+
+            feedbackEl.className = "feedback-box";
+            feedbackEl.innerHTML = "";
+
+            optionsEl.innerHTML = "";
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            quizSection.style.display = "none";
+            resultsSection.style.display = "block";
+
+            scoreText.innerHTML =
+                `Você acertou <strong>${score}</strong> de ` +
+                `<strong>${questions.length}</strong> perguntas!`;
+
+            if (score === questions.length) {
+                finalMessage.innerText =
+                    "Excelente! Você conhece muito bem os cuidados com a rúcula gigante! 🌿";
+            } else if (score >= 3) {
+                finalMessage.innerText =
+                    "Muito bem! Você já conhece vários cuidados importantes para cultivar rúcula gigante.";
+            } else {
+                finalMessage.innerText =
+                    "Continue aprendendo! Revise as dicas e tente novamente para praticar.";
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+
+            quizSection.style.display = "block";
+            resultsSection.style.display = "none";
+
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+
+</body>
+</html>
